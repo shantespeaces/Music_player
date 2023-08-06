@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synthèse | Média Player</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div id="app" v-cloak>
+
+        <div id="accueil" v-if="page_active == 'accueil'" @click="changerPage('lecteur')">
+            <div class="btn">
+                <h1>Lecteur de pistes musicales</h1>
+            </div>
+
+            <img src="/data/images/pexels-brett-jordan-2746823.jpg" alt="">
+
+        </div>
+
+
+
+        <div id="lecteur" v-if="page_active == 'lecteur'">
+            <img src="/data/images/pexels-curioso-photography-288100.jpg" alt="">
+
+            <div id="conteneur-lecteur">
+                <h2>My Playlist</h2>
+
+                <div class="recherche">
+                    <div class="recherche">
+                        <input type="text" v-model="texte_recherche" placeholder="Recherche..." @input="filtrer()">
+                    </div>
+                </div>
+
+                <div class="liste-chansons">
+                    <audio :src="'data/audio/' + selection.audio" autoplay ref="balise_audio"
+                        @timeupdate="timeupdate()"></audio>
+
+
+                    <div :class="{chanson: chanson==selection}" v-for="chanson of filtrer(chansons)"
+                        @click.prevent="lancerLecteur(chanson)">
+                        <div class="conteneur-chanson">
+
+                            <img :src="'data/images/' + chanson.image">
+
+
+                            <p class="titre">
+                                <span>{{ chanson.titre }}</span>
+                            </p>
+                            <p class="artiste">
+                                <span>{{ chanson.artiste }}</span>
+                            </p>
+                            <p class="temps">
+                                <span>{{ formatTime(chanson.temps) }}</span>
+                            </p>
+                        </div>
+                        <hr>
+                    </div>
+                </div>
+
+                <div id="control">
+                    <div class="conteneur-control">
+
+                        <div class="song">
+                            
+                            <img :src="'data/images/' + selection.image">
+                            <p class="titre">{{ selection.titre }}</p>
+                            <p class="artiste">{{ selection.artiste }}</p>
+                            
+                        </div>
+                         <button class="btn-play" @click="toggleJouer()">▶⏸</button>
+                        <div class="range-volume">
+                            <label for="volume">Volume</label>
+                            <input type="range" id="volume" name="volume" min="0" max="10" v-model="volume"
+                                @input="volumeRange()">
+
+                        </div>
+                        <div class="range-temps">
+                            <span id="current-time">{{formatTime(current_time)}}</span>
+                            <progress id="progression" :value="progression" max="100"> {{ progression }}</progress>
+                            <span id="duration">{{formatTime(duration)}}</span>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    </div>
+
+    <script src="js/main.js" type="module"></script>
+</body>
+
+</html>
